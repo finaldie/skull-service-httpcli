@@ -1,0 +1,20 @@
+// This is created by framework
+// Notes:
+//  - Top message is the main message structure we use, if you want to define
+//     some sub-messages, write them after the top message
+//  - Do not use 'requried' field
+
+package skull.service.http;
+
+message query_resp {
+    optional int32      code      = 1;
+    optional int32      http_code = 2;
+    repeated RespHeader header    = 3;
+    optional int32      latency   = 4; // Unit: milliseconds
+    optional string     body      = 5;
+}
+
+message RespHeader {
+    optional string name  = 1;
+    optional string value = 2;
+}

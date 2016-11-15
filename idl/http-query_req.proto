@@ -1,0 +1,24 @@
+// This is created by framework
+// Notes:
+//  - Top message is the main message structure we use, if you want to define
+//     some sub-messages, write them after the top message
+//  - Do not recommend to use 'requried' field, if you really want to use it,
+//     make sure it be filled
+
+package skull.service.http;
+
+message query_req {
+    optional bool      isHttps = 1;  // by default is http
+    optional string    method  = 2;  // GET or POST, by default is 'GET'
+    optional string    host    = 3;
+    optional int32     port    = 4;
+    optional string    uri     = 5;  // path + parameters
+    repeated ReqHeader header  = 6;
+    optional string    body    = 7;  // Body if method is POST
+    optional int32     timeout = 8;  // Unit: milliseconds
+}
+
+message ReqHeader {
+    optional string name  = 1;
+    optional string value = 2;
+}
