@@ -26,7 +26,8 @@ void _ep_cb(const skullcpp::Service&, skullcpp::EPClientRet& ret,
             const std::shared_ptr<HttpResponse>& httpResponse)
 {
     if (ret.status() == skullcpp::EPClient::OK) {
-        SKULLCPP_LOG_DEBUG("ep response: " << std::string((char*)ret.response()));
+        SKULLCPP_LOG_DEBUG("ep response: " <<
+            std::string((const char*)ret.response(), ret.responseSize() >= 1024 ? 1024 : ret.responseSize()));
     } else {
         SKULLCPP_LOG_DEBUG("ep timeout or error");
     }
