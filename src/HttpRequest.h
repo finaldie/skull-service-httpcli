@@ -16,6 +16,7 @@ private:
 
     bool          hasConnectionHeader;
     bool          hasAcceptHeader;
+    bool          hasAcceptCharsetHeader;
 
 private:
     bool validate() const;

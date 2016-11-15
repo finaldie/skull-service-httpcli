@@ -5,7 +5,8 @@
 #include "skull_protos.h"
 #include "HttpRequest.h"
 
-HttpRequest::HttpRequest() : hasConnectionHeader(false), hasAcceptHeader(false) {
+HttpRequest::HttpRequest() : hasConnectionHeader(false), hasAcceptHeader(false),
+  hasAcceptCharsetHeader(false) {
 }
 
 HttpRequest::~HttpRequest() {
@@ -45,6 +46,10 @@ bool HttpRequest::parse(const google::protobuf::Message& request) {
             this->hasAcceptHeader = true;
         }
 
+        if (headerItem.name() == "Accept-Charset") {
+            this->hasAcceptCharsetHeader = true;
+        }
+
         headers.insert(std::pair<std::string, std::string>(headerItem.name(), headerItem.value()));
     }
 
@@ -62,7 +67,7 @@ const std::string HttpRequest::getHttpContent() const {
     std::ostringstream oss;
     bool postMethod = this->method_ == "POST";
 
-    oss << this->method_ << " " << this->uri_ << " " << "HTTP/1.0\r\n";
+    oss << this->method_ << " " << this->uri_ << " " << "HTTP/1.1\r\n";
     for (const auto& hdr : this->headers_) {
         oss << hdr.first << ": " << hdr.second << "\r\n";
     }
@@ -76,7 +81,11 @@ const std::string HttpRequest::getHttpContent() const {
     }
 
     if (!this->hasAcceptHeader) {
-        oss << "Accept: */*\r\n";
+        oss << "Accept: text/plain\r\n";
+    }
+
+    if (!hasAcceptCharsetHeader) {
+        oss << "Accept-Charset: UTF-8\r\n";
     }
 
     oss << "\r\n";

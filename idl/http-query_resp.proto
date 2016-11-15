@@ -11,7 +11,7 @@ message query_resp {
     optional int32      http_code = 2;
     repeated RespHeader header    = 3;
     optional int32      latency   = 4; // Unit: milliseconds
-    optional string     body      = 5;
+    optional bytes      body      = 5;
 }
 
 message RespHeader {

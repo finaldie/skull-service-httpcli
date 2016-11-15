@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+
 #include "HttpResponseImp.h"
 
 static
@@ -46,7 +47,7 @@ int _on_headers_complete(http_parser* parser) {
 static
 int _on_body(http_parser* parser, const char *at, size_t length) {
     auto* httpParser = (HttpResponseImp*)parser->data;
-    httpParser->appendBody(std::string(at, length));
+    httpParser->appendBody(at, length);
     return 0;
 }
 
@@ -57,7 +58,7 @@ int _on_msg_complete(http_parser* parser) {
     return 0;
 }
 
-HttpResponseImp::HttpResponseImp() : nparsed(0), hdrState(HdrState::FIELD) {
+HttpResponseImp::HttpResponseImp() : nparsed(0), completed(false), hdrState(HdrState::FIELD) {
     http_parser_init(&this->parser, HTTP_RESPONSE);
     this->parser.data = this;
 
@@ -77,7 +78,7 @@ size_t HttpResponseImp::parse(const char* data, size_t len) {
     if (this->nparsed == len) return this->nparsed;
 
     size_t nparsed =
-        http_parser_execute(&this->parser, &this->settings, data + this->nparsed, len);
+        http_parser_execute(&this->parser, &this->settings, data + this->nparsed, len - this->nparsed);
     this->nparsed += nparsed;
 
     return this->nparsed;
@@ -89,6 +90,10 @@ size_t HttpResponseImp::parse(const std::string& data) {
 
 bool HttpResponseImp::isCompleted() const {
     return this->completed;
+}
+
+void HttpResponseImp::setCompleted() {
+    this->completed = true;
 }
 
 void HttpResponseImp::addHeader(const std::string& field, const std::string& value) {
@@ -107,10 +112,6 @@ void HttpResponseImp::appendBody(const char* content, size_t len) {
     if (!content || len == 0) return;
 
     this->body.append(content, len);
-}
-
-void HttpResponseImp::setCompleted() {
-    this->completed = true;
 }
 
 int HttpResponseImp::statusCode() const {

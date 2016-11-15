@@ -24,7 +24,6 @@ private:
     std::string body;
 
     bool        completed;
-    bool        onlyCheckCompleted;
 
 public:
     /**

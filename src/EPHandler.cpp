@@ -9,6 +9,7 @@ ssize_t _ep_unpack(const void* data, size_t len,
                    std::shared_ptr<HttpResponse>& httpResponse)
 {
     size_t nparsed = httpResponse->parse((const char*)data, len);
+
     if (!httpResponse->isCompleted()) {
         return 0;
     }
@@ -32,6 +33,7 @@ void _ep_cb(const skullcpp::Service&, skullcpp::EPClientRet& ret,
 
     // Parse the http response
     auto& resp = (skull::service::http::query_resp&)ret.apiData().response();
+
     resp.set_code(true);
     resp.set_http_code(httpResponse->statusCode());
     resp.set_latency(ret.latency());
