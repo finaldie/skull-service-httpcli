@@ -20,7 +20,6 @@ bool HttpRequest::parse(const google::protobuf::Message& request) {
     this->uri_     = query.has_uri()     ? query.uri()     : "";
     this->body_    = query.has_body()    ? query.body()    : "";
 
-    HttpReqHdrMap headers;
     int headerSz = query.header_size();
     for (int i = 0; i < headerSz; i++) {
         const auto& headerItem = query.header(i);
@@ -50,7 +49,7 @@ bool HttpRequest::parse(const google::protobuf::Message& request) {
             this->hasAcceptCharsetHeader = true;
         }
 
-        headers.insert(std::pair<std::string, std::string>(headerItem.name(), headerItem.value()));
+        this->headers_.insert(std::pair<std::string, std::string>(headerItem.name(), headerItem.value()));
     }
 
     // Validate Request
