@@ -18,12 +18,13 @@
  * Service Initialization. It will be called before module initialization.
  */
 static
-void skull_service_init(skullcpp::Service& service, const skull_config_t* config)
+int  skull_service_init(skullcpp::Service& service, const skull_config_t* config)
 {
     SKULLCPP_LOG_INFO("svc.http", "Skull service initializing");
 
     // Load skull_config to skullcpp::Config
     skullcpp::Config::instance().load(config);
+    return 0;
 }
 
 /**
