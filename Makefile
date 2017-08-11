@@ -36,10 +36,10 @@ TEST_SRCS = \
 
 # valgrind suppresion file
 #  note: if the suppresion file is exist, then need to append
-#        `--suppresions=$(SUPPRESION)` to `VALGRIND`
-SUPPRESION :=
+#        `--suppressions=$(SUPPRESSION)` to `VALGRIND`
+SUPPRESSION := $(GLOBAL_SUPPRESSION)
 
-# valgrind command
+# Default valgrind command
 VALGRIND ?= valgrind --tool=memcheck --leak-check=full -v \
     --gen-suppressions=all --error-exitcode=1
 
@@ -55,3 +55,4 @@ clean_http_parser:
 prepare: build_http_parser
 
 clean: clean_http_parser
+
